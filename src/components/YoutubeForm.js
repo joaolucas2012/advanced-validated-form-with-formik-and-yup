@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import TextError from "./TextError";
 
 const initialValues = {
   name: "",
@@ -8,6 +9,10 @@ const initialValues = {
   channel: "",
   comment: "",
   address: "",
+  social: {
+    facebook: "",
+    twitter: "",
+  },
 };
 
 const onSubmit = (values) => {
@@ -33,19 +38,19 @@ function YoutubeForm() {
         <div className="form-control">
           <label htmlFor="name">Name</label>
           <Field type="text" id="name" name="name" />
-          <ErrorMessage name="name" />
+          <ErrorMessage name="name" component={TextError} />
         </div>
 
         <div className="form-control">
           <label htmlFor="email">E-mail</label>
           <Field type="email" id="email" name="email" />
-          <ErrorMessage name="email" />
+          <ErrorMessage name="email" component={TextError} />
         </div>
 
         <div className="form-control">
           <label htmlFor="channel">Channel</label>
           <Field type="text" id="channel" name="channel" />
-          <ErrorMessage name="channel" />
+          <ErrorMessage name="channel" component={TextError} />
         </div>
 
         <div className="form-control">
@@ -67,6 +72,16 @@ function YoutubeForm() {
               );
             }}
           </Field>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="facebook">Facebook profile</label>
+          <Field type="text" id="facebook" name="social.facebook" />
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="twitter">Twitter profile</label>
+          <Field type="text" id="twitter" name="social.twitter" />
         </div>
 
         <button type="submit">Submit</button>
