@@ -6,7 +6,7 @@ import {
   Field,
   ErrorMessage,
   FieldArray,
-  FastField,
+  // FastField,
 } from "formik";
 import * as Yup from "yup";
 import TextError from "./TextError";
@@ -52,6 +52,17 @@ const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email format").required("Required"),
   channel: Yup.string().required("Required"),
   comments: Yup.string().required("Required"),
+  address: Yup.string().required("Required"),
+  social: Yup.object().shape({
+    facebook: Yup.string().required("Required"),
+    twitter: Yup.string().required("Required"),
+  }),
+  phoneNumbers: Yup.array(Yup.number()
+  .typeError("Invalid phone number")
+  .positive("A phone number can't start with a minus")
+  .integer("A phone number can't include a decimal point")
+  .min(9)
+  .required("Required")),
 });
 
 function YoutubeForm() {
@@ -97,7 +108,7 @@ function YoutubeForm() {
 
             <div className="form-control">
               <label htmlFor="address">Address</label>
-              <FastField name="address">
+              {/* <FastField name="address">
                 {(props) => {
                   console.log("Field render");
                   const { field, meta } = props;
@@ -110,27 +121,33 @@ function YoutubeForm() {
                     </div>
                   );
                 }}
-              </FastField>
+              </FastField> */}
+              <Field type="text" id="address" name="address" />
+              <ErrorMessage name="address" component={TextError} />
             </div>
 
             <div className="form-control">
               <label htmlFor="facebook">Facebook profile</label>
               <Field type="text" id="facebook" name="social.facebook" />
+              <ErrorMessage name="social.facebook" component={TextError} />
             </div>
 
             <div className="form-control">
               <label htmlFor="twitter">Twitter profile</label>
               <Field type="text" id="twitter" name="social.twitter" />
+              <ErrorMessage name="social.twitter" component={TextError} />
             </div>
 
             <div className="form-control">
               <label htmlFor="primaryPh">Primary phone number</label>
               <Field type="text" id="primaryPh" name="phoneNumbers[0]" />
+              <ErrorMessage name="phoneNumbers[0]" component={TextError} />
             </div>
 
             <div className="form-control">
               <label htmlFor="secondaryPh">Secondary phone number</label>
               <Field type="text" id="secondaryPh" name="phoneNumbers[1]" />
+              <ErrorMessage name="phoneNumbers[1]" component={TextError} />
             </div>
 
             <div className="form-control">
