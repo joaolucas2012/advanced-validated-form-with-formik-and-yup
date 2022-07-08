@@ -25,13 +25,14 @@ const initialValues = {
 };
 
 const onSubmit = (values) => {
-  console.log("Form data", values);
+  console.log("Form props", values);
 };
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email format").required("Required"),
   channel: Yup.string().required("Required"),
+  comments: Yup.string().required("Required"),
 });
 
 function YoutubeForm() {
@@ -40,102 +41,110 @@ function YoutubeForm() {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      validateOnMount
       // validateOnChange={false}
       // validateOnBlur={false}
     >
-      <Form>
-        <div className="form-control">
-          <label htmlFor="name">Name</label>
-          <Field type="text" id="name" name="name" />
-          <ErrorMessage name="name" component={TextError} />
-        </div>
+      {formik => {
+        console.log('Formik props', formik)
+        return (
+          <Form>
+            <div className="form-control">
+              <label htmlFor="name">Name</label>
+              <Field type="text" id="name" name="name" />
+              <ErrorMessage name="name" component={TextError} />
+            </div>
 
-        <div className="form-control">
-          <label htmlFor="email">E-mail</label>
-          <Field type="email" id="email" name="email" />
-          <ErrorMessage name="email" component={TextError} />
-        </div>
+            <div className="form-control">
+              <label htmlFor="email">E-mail</label>
+              <Field type="email" id="email" name="email" />
+              <ErrorMessage name="email" component={TextError} />
+            </div>
 
-        <div className="form-control">
-          <label htmlFor="channel">Channel</label>
-          <Field type="text" id="channel" name="channel" />
-          <ErrorMessage name="channel" component={TextError} />
-        </div>
+            <div className="form-control">
+              <label htmlFor="channel">Channel</label>
+              <Field type="text" id="channel" name="channel" />
+              <ErrorMessage name="channel" component={TextError} />
+            </div>
 
-        <div className="form-control">
-          <label htmlFor="comments">Comments</label>
-          <Field as="textarea" id="comments" name="comments" />
-        </div>
+            <div className="form-control">
+              <label htmlFor="comments">Comments</label>
+              <Field as="textarea" id="comments" name="comments" />
+              <ErrorMessage name="comments" component={TextError} />
+            </div>
 
-        <div className="form-control">
-          <label htmlFor="address">Address</label>
-          <FastField name="address">
-            {(props) => {
-              console.log("Field render");
-              const { field, form, meta } = props;
-              return (
-                <div>
-                  <input type="text" id="address" {...field} />
-                  {meta.touched && meta.error ? <div>{meta.error}</div> : null}
-                </div>
-              );
-            }}
-          </FastField>
-        </div>
-
-        <div className="form-control">
-          <label htmlFor="facebook">Facebook profile</label>
-          <Field type="text" id="facebook" name="social.facebook" />
-        </div>
-
-        <div className="form-control">
-          <label htmlFor="twitter">Twitter profile</label>
-          <Field type="text" id="twitter" name="social.twitter" />
-        </div>
-
-        <div className="form-control">
-          <label htmlFor="primaryPh">Primary phone number</label>
-          <Field type="text" id="primaryPh" name="phoneNumbers[0]" />
-        </div>
-
-        <div className="form-control">
-          <label htmlFor="secondaryPh">Secondary phone number</label>
-          <Field type="text" id="secondaryPh" name="phoneNumbers[1]" />
-        </div>
-
-        <div className="form-control">
-          <label>List of phone numbers</label>
-          <FieldArray name="phNumbers">
-            {(fieldArrayProps) => {
-              const { push, remove, form } = fieldArrayProps;
-              const { values } = form;
-              const { phNumbers } = values;
-              console.log("Form errors", form.errors);
-              return (
-                <div>
-                  {phNumbers.map((phNumber, index) => (
-                    <div key={index}>
-                      <Field name={`phNumbers[${index}]`} />
-                      {index > 0 && (
-                        <button type="button" onClick={() => remove(index)}>
-                          {" "}
-                          -{" "}
-                        </button>
-                      )}
-                      <button type="button" onClick={() => push("")}>
-                        {" "}
-                        +{" "}
-                      </button>
+            <div className="form-control">
+              <label htmlFor="address">Address</label>
+              <FastField name="address">
+                {(props) => {
+                  console.log("Field render");
+                  const { field, form, meta } = props;
+                  return (
+                    <div>
+                      <input type="text" id="address" {...field} />
+                      {meta.touched && meta.error ? <div>{meta.error}</div> : null}
                     </div>
-                  ))}
-                </div>
-              );
-            }}
-          </FieldArray>
-        </div>
+                  );
+                }}
+              </FastField>
+            </div>
 
-        <button type="submit">Submit</button>
-      </Form>
+            <div className="form-control">
+              <label htmlFor="facebook">Facebook profile</label>
+              <Field type="text" id="facebook" name="social.facebook" />
+            </div>
+
+            <div className="form-control">
+              <label htmlFor="twitter">Twitter profile</label>
+              <Field type="text" id="twitter" name="social.twitter" />
+            </div>
+
+            <div className="form-control">
+              <label htmlFor="primaryPh">Primary phone number</label>
+              <Field type="text" id="primaryPh" name="phoneNumbers[0]" />
+            </div>
+
+            <div className="form-control">
+              <label htmlFor="secondaryPh">Secondary phone number</label>
+              <Field type="text" id="secondaryPh" name="phoneNumbers[1]" />
+            </div>
+
+            <div className="form-control">
+              <label>List of phone numbers</label>
+              <FieldArray name="phNumbers">
+                {(fieldArrayProps) => {
+                  const { push, remove, form } = fieldArrayProps;
+                  const { values } = form;
+                  const { phNumbers } = values;
+                  console.log("Form errors", form.errors);
+                  return (
+                    <div>
+                      {phNumbers.map((phNumber, index) => (
+                        <div key={index}>
+                          <Field name={`phNumbers[${index}]`} />
+                          {index > 0 && (
+                            <button type="button" onClick={() => remove(index)}>
+                              {" "}
+                              -{" "}
+                            </button>
+                          )}
+                          <button type="button" onClick={() => push("")}>
+                            {" "}
+                            +{" "}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }}
+              </FieldArray>
+            </div>
+            <button type="submit" disabled={!formik.isValid}>
+              Submit
+            </button>
+          </Form>
+        )
+      }}
     </Formik>
   );
 }
