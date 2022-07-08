@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Formik,
   Form,
@@ -24,6 +24,20 @@ const initialValues = {
   phNumbers: [""],
 };
 
+const savedValues = {
+  name: "João",
+  email: "J@unifei.com",
+  channel: "Canal",
+  comments: "hey!",
+  address: "221b Baker Street",
+  social: {
+    facebook: "",
+    twitter: "",
+  },
+  phoneNumbers: ["", ""],
+  phNumbers: [""],
+};
+
 const onSubmit = (values, onSubmitProps) => {
   console.log("Form props", values);
   // console.log("Submit props", onSubmitProps);
@@ -39,11 +53,13 @@ const validationSchema = Yup.object({
 });
 
 function YoutubeForm() {
+  const [formValues, setFormValues] = useState(null);
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      enableReinitialize
       validateOnMount
       // validateOnChange={false}
       // validateOnBlur={false}
@@ -144,6 +160,9 @@ function YoutubeForm() {
                 }}
               </FieldArray>
             </div>
+            <button type="button" onClick={() => setFormValues(savedValues)}>
+              Load saved data
+            </button>
             <button
               type="submit"
               disabled={!formik.isValid || formik.isSubmitting}
