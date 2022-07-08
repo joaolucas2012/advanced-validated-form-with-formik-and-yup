@@ -24,8 +24,11 @@ const initialValues = {
   phNumbers: [""],
 };
 
-const onSubmit = (values) => {
+const onSubmit = (values, onSubmitProps) => {
   console.log("Form props", values);
+  // console.log("Submit props", onSubmitProps);
+  // the correct is to wait the api response before set the submitting to false
+  onSubmitProps.setSubmitting(false);
 };
 
 const validationSchema = Yup.object({
@@ -45,8 +48,8 @@ function YoutubeForm() {
       // validateOnChange={false}
       // validateOnBlur={false}
     >
-      {formik => {
-        console.log('Formik props', formik)
+      {(formik) => {
+        console.log("Formik props", formik);
         return (
           <Form>
             <div className="form-control">
@@ -78,11 +81,13 @@ function YoutubeForm() {
               <FastField name="address">
                 {(props) => {
                   console.log("Field render");
-                  const { field, form, meta } = props;
+                  const { field, meta } = props;
                   return (
                     <div>
                       <input type="text" id="address" {...field} />
-                      {meta.touched && meta.error ? <div>{meta.error}</div> : null}
+                      {meta.touched && meta.error ? (
+                        <div>{meta.error}</div>
+                      ) : null}
                     </div>
                   );
                 }}
@@ -139,11 +144,14 @@ function YoutubeForm() {
                 }}
               </FieldArray>
             </div>
-            <button type="submit" disabled={!formik.isValid}>
+            <button
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
               Submit
             </button>
           </Form>
-        )
+        );
       }}
     </Formik>
   );
