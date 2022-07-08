@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+// import React, { useState } from "react";
 import {
   Formik,
   Form,
@@ -24,25 +25,26 @@ const initialValues = {
   phNumbers: [""],
 };
 
-const savedValues = {
-  name: "João",
-  email: "J@unifei.com",
-  channel: "Canal",
-  comments: "hey!",
-  address: "221b Baker Street",
-  social: {
-    facebook: "",
-    twitter: "",
-  },
-  phoneNumbers: ["", ""],
-  phNumbers: [""],
-};
+// const savedValues = {
+//   name: "João",
+//   email: "J@unifei.com",
+//   channel: "Canal",
+//   comments: "hey!",
+//   address: "221b Baker Street",
+//   social: {
+//     facebook: "",
+//     twitter: "",
+//   },
+//   phoneNumbers: ["", ""],
+//   phNumbers: [""],
+// };
 
 const onSubmit = (values, onSubmitProps) => {
   console.log("Form props", values);
   // console.log("Submit props", onSubmitProps);
   // the correct is to wait the api response before set the submitting to false
   onSubmitProps.setSubmitting(false);
+  onSubmitProps.resetForm();
 };
 
 const validationSchema = Yup.object({
@@ -53,10 +55,11 @@ const validationSchema = Yup.object({
 });
 
 function YoutubeForm() {
-  const [formValues, setFormValues] = useState(null);
+  // const [formValues, setFormValues] = useState(null);
   return (
     <Formik
-      initialValues={formValues || initialValues}
+      // initialValues={formValues || initialValues}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       enableReinitialize
@@ -160,15 +163,16 @@ function YoutubeForm() {
                 }}
               </FieldArray>
             </div>
-            <button type="button" onClick={() => setFormValues(savedValues)}>
+            {/* <button type="button" onClick={() => setFormValues(savedValues)}>
               Load saved data
-            </button>
+            </button> */}
             <button
               type="submit"
               disabled={!formik.isValid || formik.isSubmitting}
             >
               Submit
             </button>
+            <button type="reset">Reset</button>
           </Form>
         );
       }}
